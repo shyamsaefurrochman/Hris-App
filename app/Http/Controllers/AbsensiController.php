@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Absensi;
 use Illuminate\Http\Request;
+use App\Models\Absensi;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\DB;
 
-class PegawaiController extends Controller
+class AbsensiController extends Controller
 {
     function __construct()
     {
@@ -34,8 +34,13 @@ class PegawaiController extends Controller
      */
     public function index()
     {
+        $absensis = DB::table('tb_absensi')
+            ->orderBy('tgl_absen', 'asc')
+            ->get();
         $pegawais = User::get();
-        return view('admin/pegawai.index', compact('pegawais'));
+
+        // dd(date("Y-m-d"));
+        return view('admin.absensi.index', compact('absensis', 'pegawais'));
     }
 
     /**
@@ -57,39 +62,34 @@ class PegawaiController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'nama' => 'required',
-            'email' => 'required',
-            'password' => 'required|min:8',
-            'nomor_telepon' => 'required|min:12|max:13',
-            'alamat' => 'required',
-            'role' => 'required',
+            'tgl_absen' => 'required',
+            'time_start' => 'required',
+            'time_end' => 'required',
+            'keterangan' => 'required',
         ]);
 
-        $pegawai = User::create([
-            'nama' => $request->nama,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'nomor_telepon' => $request->nomor_telepon,
-            'alamat' => $request->alamat,
-            'role' => $request->role,
-            'foto' => "user.png",
+        $absen = Absensi::create([
+            'id_user' => Auth::user()->id_user,
+            'tgl_absen' => $request->tgl_absen,
+            'time_start' => $request->time_start,
+            'time_end' => $request->time_end,
+            'keterangan' => $request->keterangan,
         ]);
 
-        if ($pegawai) {
+        if ($absen) {
             return redirect()
-                ->route('pegawai.index')
+                ->route('absensi.index')
                 ->with([
-                    Alert::success('Berhasil', 'Pegawai Berhasil Ditambahkan')
+                    Alert::success('Berhasil', 'Absensi Berhasil Ditambahkan')
                 ]);
         } else {
             return redirect()
                 ->back()
                 ->withInput()
                 ->with([
-                    Alert::error('Gagal', 'Pegawai Gagal Ditambahkan')
+                    Alert::error('Gagal', 'Absensi Gagal Ditambahkan')
                 ]);
         }
-
     }
 
     /**
@@ -121,54 +121,35 @@ class PegawaiController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $this->validate($request, [
-            'nama' => 'required',
-            'email' => 'required',
-            'nomor_telepon' => 'required|min:12|max:13',
-            'alamat' => 'required',
-            'role' => 'required',
-            'foto' => 'mimes:jpg,jpeg,png',
+            'tgl_absen' => 'required',
+            'time_start' => 'required',
+            'time_end' => 'required',
+            'keterangan' => 'required',
         ]);
 
-        $foto = $request->file('foto');
-        $old = User::where('id_user', Auth::user()->id_user)->first();
-
-        function fotoprofil($foto, $old)
-        {
-            if ($foto != null) {
-                $filename = $foto->getClientOriginalName();
-                $foto->move(public_path() . '/storage/foto', $filename);
-                return $filename;
-            } else {
-                return $old->foto;
-            }
-        }
-        
-
-        $pegawai = User::where('id_user', $request->id_user);
-        $pegawai->update([
-            'nama' => $request->nama,
-            'email' => $request->email,
-            'nomor_telepon' => $request->nomor_telepon,
-            'alamat' => $request->alamat,
-            'role' => $request->role,
-            'foto' => fotoprofil($foto, $old),
+        $absen = Absensi::where('id_absensi', $request->id_absensi);
+        $absen->update([
+            'tgl_absen' => $request->tgl_absen,
+            'time_start' => $request->time_start,
+            'time_end' => $request->time_end,
+            'keterangan' => $request->keterangan,
         ]);
 
-        if ($pegawai) {
+        if ($absen) {
             return redirect()
-                ->route('pegawai.index')
+                ->route('absensi.index')
                 ->with([
-                    Alert::success('Berhasil', 'Pegawai Berhasil Diubah')
+                    Alert::success('Berhasil', 'Absensi Berhasil Diubah')
                 ]);
         } else {
             return redirect()
                 ->back()
                 ->withInput()
                 ->with([
-                    Alert::error('Gagal', 'Pegawai Gagal Diubah')
+                    Alert::error('Gagal', 'Absensi Gagal Diubah')
                 ]);
         }
     }
@@ -181,20 +162,20 @@ class PegawaiController extends Controller
      */
     public function delete(Request $request)
     {
-        $pegawai = User::where('id_user', $request->id_user);
-        $pegawai->delete();
+        $absen = Absensi::where('id_absensi', $request->id_absensi);
+        $absen->delete();
 
-        if ($pegawai) {
+        if ($absen) {
             return redirect()
-                ->route('pegawai.index')
+                ->route('absensi.index')
                 ->with([
-                    Alert::success('Berhasil', 'Pegawai Berhasil Dihapus')
+                    Alert::success('Berhasil', 'Absensi Berhasil Dihapus')
                 ]);
         } else {
             return redirect()
-                ->route('pegawai.index')
+                ->route('absensi.index')
                 ->with([
-                    Alert::error('Gagal', 'Pegawai Gagal Dihapus')
+                    Alert::error('Gagal', 'Absensi Gagal Dihapus')
                 ]);
         }
     }

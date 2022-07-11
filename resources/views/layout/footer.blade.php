@@ -6,9 +6,8 @@
                     <p class="mb-0 text-muted">©
                         <script>
                             document.write(new Date().getFullYear())
-                        </script> Landrick. Design with <i
-                            class="mdi mdi-heart text-danger"></i> by <a href="https://shreethemes.in/"
-                            target="_blank" class="text-reset">Shreethemes</a>.
+                        </script> HRIS By <a href="https://geekgarden.id/"
+                            target="_blank" class="text-reset">GeekGarden Software House</a>
                     </p>
                 </div>
             </div>

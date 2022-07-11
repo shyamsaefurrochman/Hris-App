@@ -24,16 +24,7 @@
             <div class="top-header">
                 <div class="header-bar d-flex justify-content-between border-bottom">
                     <div class="d-flex align-items-center">
-                        <a href="#" class="logo-icon me-3">
-                            <img src="{{ asset('storage/assets/images/logo-icon.png') }}" height="30"
-                                class="small" alt="">
-                            <span class="big">
-                                <img src="{{ asset('storage/assets/images/logo-dark.png') }}" height="24"
-                                    class="logo-light-mode" alt="">
-                                <img src="{{ asset('storage/assets/images/logo-light.png') }}" height="24"
-                                    class="logo-dark-mode" alt="">
-                            </span>
-                        </a>
+                       
                         <a id="close-sidebar" class="btn btn-icon btn-soft-light" href="javascript:void(0)">
                             <i class="ti ti-menu-2"></i>
                         </a>
@@ -59,10 +50,8 @@
                     <div class="row">
                         <div class="col-12 mt-4">
                             <div class="card border-0 rounded shadow p-4">
-                                <h5 class="mb-0 mb-3">Blank Page</h5>
-                                <p class="text-muted mb-0">Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                                    Libero, aliquid soluta. Voluptas neque adipisci fuga magnam nulla exercitationem
-                                    corrupti ducimus itaque soluta earum! Fugiat, animi id sit ad magnam facilis.</p>
+                                <h5 class="mb-0 mb-3">GeekGarden Software House</h5>
+                                <img src="{{ asset('storage/foto/pegawai.png') }}" alt="">
                             </div>
                         </div>
                         <!--end col-->

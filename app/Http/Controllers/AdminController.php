@@ -6,9 +6,26 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\User;
+use App\Models\Absensi;
 
 class AdminController extends Controller
 {
+    function __construct()
+    {
+        $absensis = Absensi::get();
+        foreach ($absensis as $absensi) {
+            if ($absensi->time_end < date("h:i")) {
+                $absen = Absensi::where('tgl_absen', '<', date("Y-m-d"));
+                $absen->update([
+                    'keterangan' => 'tutup',
+                ]);
+                $absen = Absensi::where('time_end', '<', date("h:i"));
+                $absen->update([
+                    'keterangan' => 'tutup',
+                ]);
+            }
+        }
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +34,7 @@ class AdminController extends Controller
     public function index()
     {
         $pegawais = User::get();
-        return view('admin.index', compact('pegawais'));
+        return view('admin.dashboard', compact('pegawais'));
     }
 
     /**

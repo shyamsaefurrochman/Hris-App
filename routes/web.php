@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\AbsensiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,4 +36,6 @@ Route::group(['middleware' => ['auth', 'checkrole:admin']], function () {
     Route::resource('admin/dashboard', AdminController::class);
     Route::resource('admin/pegawai', PegawaiController::class);
     Route::post('admin/pegawai/delete', [PegawaiController::class, 'delete'])->name('pegawai.delete');
+    Route::resource('admin/absensi', AbsensiController::class);
+    Route::post('admin/absensi/delete', [AbsensiController::class, 'delete'])->name('absensi.delete');
 });

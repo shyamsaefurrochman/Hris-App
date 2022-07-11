@@ -2,19 +2,17 @@
     <div class="sidebar-content" data-simplebar style="height: calc(100% - 60px);">
         <div class="sidebar-brand">
             <a href="index.html">
-                <img src="{{ asset('storage/assets/images/logo-dark.png') }}" height="24" class="logo-light-mode" alt="">
-                <img src="{{ asset('storage/assets/images/logo-light.png') }}" height="24" class="logo-dark-mode" alt="">
-                <span class="sidebar-colored">
-                    <img src="{{ asset('storage/assets/images/logo-light.png') }}" height="24" alt="">
-                </span>
+                <h3 class="logo" style="color: #3933FF"><b>HRiS System</b></h3>
             </a>
         </div>
 
         <ul class="sidebar-menu">
-            <li><a href="{{ route('dashboard.index') }}"><i class="ti ti-home me-2"></i>Dashboard</a></li>
+            <li><a href="{{ route('dashboard.index') }}"><i class="ti ti-dashboard me-2"></i>Dashboard</a></li>
             <li><a href="{{ route('pegawai.index') }}"><i class="ti ti-user me-2"></i>Pegawai</a></li>
-            <li><a href="#"><i class="ti ti-list me-2"></i>List Kehadiran</a>
-            </li>
+            <li><a href="{{ route('absensi.index') }}"><i class="ti ti-list me-2"></i>List Absensi</a></li>
+            <li><a href="#"><i class="ti ti-briefcase me-2"></i>List Absensi WFO</a></li>
+            <li><a href="#"><i class="ti ti-home me-2"></i>List Absensi WFH</a></li>
+            <li><a href="#"><i class="ti ti-receipt me-2"></i>Perizinan Cuti</a></li>
             <!-- sidebar-menu  -->
     </div>
     <!-- Sidebar Footer -->

@@ -132,12 +132,12 @@
                                                                 </div>
                                                             @enderror
                                                         </div>
-                                                        <div class="mb-3">
+                                                        <div class="">
                                                             <label for="exampleFormControlInput1"
                                                                 class="form-label @error('role') is-invalid @enderror">Role</label>
                                                             <select class="form-select" name="role"
                                                                 aria-label="Default select example">
-                                                                <option selected>---Pilih Role---</option>
+                                                                <option disabled selected>---Pilih Role---</option>
                                                                 <option value="admin">Admin</option>
                                                                 <option value="user">User</option>
                                                             </select>
@@ -351,7 +351,7 @@
                                                 class="form-label @error('role') is-invalid @enderror">Role</label>
                                             <select class="form-select" name="role"
                                                 aria-label="Default select example" id="role_put">
-                                                <option selected>---Pilih Role---</option>
+                                                <option disabled selected>---Pilih Role---</option>
                                                 <option value="admin">Admin</option>
                                                 <option value="user">User</option>
                                             </select>
@@ -487,6 +487,7 @@
     <!-- Offcanvas End -->
 
     @include('layout/js')
+    <script src="{{ asset('storage/assets/js/admin/pegawai.js') }}"></script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
