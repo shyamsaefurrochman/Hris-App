@@ -43,7 +43,7 @@
                                 <button class="btn btn-primary w-100" type="submit">Login</button>
 
                                 <div class="col-12 text-center mt-3">
-                                    <p class="mb-0 mt-3"><small class="text-dark me-2">Don't have an account ?</small> <a href="{{ route('registrasi') }}" class="text-dark fw-bold">Registrasi</a></p>
+                                    <p class="mb-0 mt-3"><small class="text-dark me-2">Don't have an account ?</small><a href="{{ route('registrasi') }}" class="text-dark fw-bold">Registrasi</a></p>
                                 </div><!--end col-->
 
                                 <p class="mb-0 text-muted mt-3 text-center">© <script>document.write(new Date().getFullYear())</script> GeekGarden Sofware House.</p>

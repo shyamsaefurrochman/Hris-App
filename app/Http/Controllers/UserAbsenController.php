@@ -3,29 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
-use App\Models\User;
-use App\Models\Absensi;
+use App\Models\UserAbsen;
 
-class AdminController extends Controller
+class UserAbsenController extends Controller
 {
-    function __construct()
-    {
-        $absensis = Absensi::get();
-        foreach ($absensis as $absensi) {
-            if ($absensi->time_end < date("h:i")) {
-                $absen = Absensi::where('tgl_absen', '<', date("Y-m-d"));
-                $absen->update([
-                    'keterangan' => 'tutup',
-                ]);
-                $absen = Absensi::where('time_end', '<', date("H:i"));
-                $absen->update([
-                    'keterangan' => 'tutup',
-                ]);
-            }
-        }
-    }
     /**
      * Display a listing of the resource.
      *
@@ -33,8 +15,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $pegawais = User::get();
-        return view('admin.dashboard', compact('pegawais'));
+        //
     }
 
     /**
@@ -89,7 +70,29 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'keterangan' => 'required',
+        ]);
+
+        $absen = UserAbsen::where('id_user_absen', $request->id_user_absen);
+        $absen->update([
+            'keterangan' => $request->keterangan,
+        ]);
+
+        if ($absen) {
+            return redirect()
+                ->route('absensi.show', [$request->id_absensi])
+                ->with([
+                    Alert::success('Berhasil', 'Absensi Pegawai Berhasil Diubah')
+                ]);
+        } else {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with([
+                    Alert::error('Gagal', 'Absensi Pegawai Gagal Diubah')
+                ]);
+        }
     }
 
     /**

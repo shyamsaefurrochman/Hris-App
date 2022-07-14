@@ -20,7 +20,7 @@ class PegawaiController extends Controller
                 $absen->update([
                     'keterangan' => 'tutup',
                 ]);
-                $absen = Absensi::where('time_end', '<', date("h:i"));
+                $absen = Absensi::where('time_end', '<', date("H:i"));
                 $absen->update([
                     'keterangan' => 'tutup',
                 ]);

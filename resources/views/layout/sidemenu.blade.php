@@ -10,8 +10,6 @@
             <li><a href="{{ route('dashboard.index') }}"><i class="ti ti-dashboard me-2"></i>Dashboard</a></li>
             <li><a href="{{ route('pegawai.index') }}"><i class="ti ti-user me-2"></i>Pegawai</a></li>
             <li><a href="{{ route('absensi.index') }}"><i class="ti ti-list me-2"></i>List Absensi</a></li>
-            <li><a href="#"><i class="ti ti-briefcase me-2"></i>List Absensi WFO</a></li>
-            <li><a href="#"><i class="ti ti-home me-2"></i>List Absensi WFH</a></li>
             <li><a href="#"><i class="ti ti-receipt me-2"></i>Perizinan Cuti</a></li>
             <!-- sidebar-menu  -->
     </div>

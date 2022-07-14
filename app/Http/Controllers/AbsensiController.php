@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Absensi;
 use App\Models\User;
+use App\Models\UserAbsen;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,7 @@ class AbsensiController extends Controller
                 $absen->update([
                     'keterangan' => 'tutup',
                 ]);
-                $absen = Absensi::where('time_end', '<', date("h:i"));
+                $absen = Absensi::where('time_end', '<', date("H:i"));
                 $absen->update([
                     'keterangan' => 'tutup',
                 ]);
@@ -35,11 +36,10 @@ class AbsensiController extends Controller
     public function index()
     {
         $absensis = DB::table('tb_absensi')
-            ->orderBy('tgl_absen', 'asc')
+            ->orderBy('tgl_absen', 'desc')
             ->get();
         $pegawais = User::get();
 
-        // dd(date("Y-m-d"));
         return view('admin.absensi.index', compact('absensis', 'pegawais'));
     }
 
@@ -76,7 +76,23 @@ class AbsensiController extends Controller
             'keterangan' => $request->keterangan,
         ]);
 
-        if ($absen) {
+        $id_absensi = DB::table('tb_absensi')->max('id_absensi');
+        $max = $id_absensi + 1;
+        DB::update("ALTER TABLE tb_absensi AUTO_INCREMENT = $max;");
+
+        $pegawais = User::get();
+
+        foreach ($pegawais as $pegawai) {
+            $UserAbsens[] = UserAbsen::create(
+                $Absens = [
+                    'id_absensi' => $max,
+                    'id_user' => $pegawai->id_user,
+                    'keterangan' => "tidak hadir",
+                ]
+            );
+        };
+
+        if ($absen && $UserAbsens) {
             return redirect()
                 ->route('absensi.index')
                 ->with([
@@ -100,7 +116,20 @@ class AbsensiController extends Controller
      */
     public function show($id)
     {
-        //
+        $userAbsens = DB::table('tb_user_absen')
+            ->join('users', 'tb_user_absen.id_user', '=', 'users.id_user')
+            ->where('id_absensi', $id)
+            ->orderBy('nama', 'asc')
+            ->get();
+
+        $tgl_absen = DB::table('tb_user_absen')
+            ->join('tb_absensi', 'tb_user_absen.id_absensi', '=', 'tb_absensi.id_absensi')
+            ->where('tb_user_absen.id_absensi', $id)
+            ->first();
+
+        $pegawais = User::get();
+
+        return view('admin.absensi.show', compact('userAbsens', 'tgl_absen', 'pegawais'));
     }
 
     /**

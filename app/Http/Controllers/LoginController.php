@@ -109,18 +109,21 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             if (Auth::user()->role == 'admin') {
                 $request->session()->regenerate();
-    
+
                 return redirect()->intended(route('dashboard.index'));
             } else {
                 $request->session()->regenerate();
-    
+
                 return redirect()->intended('/');
             }
         }
 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
+        return redirect()
+            ->back()
+            ->withInput()
+            ->with([
+                Alert::error('Login Failed', 'Email atau Password Salah')
+            ]);
     }
 
     public function logout(Request $request)

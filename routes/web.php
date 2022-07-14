@@ -5,6 +5,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\UserAbsenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,4 +39,8 @@ Route::group(['middleware' => ['auth', 'checkrole:admin']], function () {
     Route::post('admin/pegawai/delete', [PegawaiController::class, 'delete'])->name('pegawai.delete');
     Route::resource('admin/absensi', AbsensiController::class);
     Route::post('admin/absensi/delete', [AbsensiController::class, 'delete'])->name('absensi.delete');
+});
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('/home', UserAbsenController::class);
 });

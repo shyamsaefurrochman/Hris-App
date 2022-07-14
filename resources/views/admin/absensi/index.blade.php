@@ -160,13 +160,13 @@
                                                 </td>
                                                 <td class="text-center">
                                                     <div>
-                                                        <button style="border: none; background: none;"
+                                                        <a href="{{ route('absensi.show', $absensi->id_absensi) }}" role="button" style="border: none; background: none;"
                                                             title="Show Absensi" data-bs-toggle="tooltip"
                                                             data-bs-placement="bottom">
                                                             <span class="text-success me-2">
                                                                 <i data-feather="eye" class="fea icon-sm"> </i>
                                                             </span>
-                                                        </button>
+                                                        </a>
                                                         <button style="border: none; background: none;"
                                                             onclick="handleEditAbsensi('{{ $absensis }}', '{{ $absensi->id_absensi }}')"
                                                             title="Edit Absensi" data-bs-toggle="tooltip"
