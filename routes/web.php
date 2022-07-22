@@ -17,6 +17,11 @@ use App\Http\Controllers\UserAbsenController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/clear-cache', function() {
+    $exitCode = Artisan::call('cache:clear');
+    $exitCode = Artisan::call('config:cache');
+    return view('welcome');
+});
 
 Route::get('/', function () {
     return view('welcome');
@@ -32,15 +37,12 @@ Route::post('/processlogin', [LoginController::class, 'proccesslogin'])->name('p
 
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
-
-Route::group(['middleware' => ['auth', 'checkrole:admin']], function () {
-    Route::resource('admin/dashboard', AdminController::class);
-    Route::resource('admin/pegawai', PegawaiController::class);
-    Route::post('admin/pegawai/delete', [PegawaiController::class, 'delete'])->name('pegawai.delete');
-    Route::resource('admin/absensi', AbsensiController::class);
-    Route::post('admin/absensi/delete', [AbsensiController::class, 'delete'])->name('absensi.delete');
-});
-
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('/home', UserAbsenController::class);
+    Route::resource('/dashboard', AdminController::class);
+    Route::resource('/pegawai', PegawaiController::class);
+    Route::post('/pegawai/delete', [PegawaiController::class, 'delete'])->name('pegawai.delete');
+    Route::resource('/absensi', AbsensiController::class);
+    Route::post('/absensi/delete', [AbsensiController::class, 'delete'])->name('absensi.delete');
+    Route::put('/userpresensi', [UserAbsenController::class, 'updatePresensi'])->name('presensi.update');
 });

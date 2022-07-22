@@ -5,9 +5,22 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\UserAbsen;
+use App\Models\Absensi;
 
 class UserAbsenController extends Controller
 {
+    function __construct()
+    {
+        $absensis = Absensi::get();
+        $absen = Absensi::where('tgl_absen', '<', date("Y-m-d"));
+        $absen->update([
+            'keterangan' => 'tutup',
+        ]);
+        $absen = Absensi::where('time_end', '<', date("H:i"));
+        $absen->update([
+            'keterangan' => 'tutup',
+        ]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -92,6 +105,43 @@ class UserAbsenController extends Controller
                 ->with([
                     Alert::error('Gagal', 'Absensi Pegawai Gagal Diubah')
                 ]);
+        }
+    }
+
+    public function updatePresensi(Request $request)
+    {
+        $userAbsen = Absensi::where('id_absensi', $request->id_absensi)->first();
+
+        if (date("H:i") < $userAbsen->time_start) {
+            return redirect()
+                ->route('dashboard.index')
+                ->with([
+                    Alert::error('Gagal', 'Waktu Presensi Belum Dimulai')
+                ]);
+        } else {
+            $this->validate($request, [
+                'keterangan' => 'required',
+            ]);
+
+            $absen = UserAbsen::where('id_user_absen', $request->id_user_absen);
+            $absen->update([
+                'keterangan' => $request->keterangan,
+            ]);
+
+            if ($absen) {
+                return redirect()
+                    ->route('dashboard.index')
+                    ->with([
+                        Alert::success('Berhasil', 'Berhasil Input Presensi')
+                    ]);
+            } else {
+                return redirect()
+                    ->back()
+                    ->withInput()
+                    ->with([
+                        Alert::error('Gagal', 'Gagal Input Presensi')
+                    ]);
+            }
         }
     }
 

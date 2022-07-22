@@ -14,18 +14,14 @@ class PegawaiController extends Controller
     function __construct()
     {
         $absensis = Absensi::get();
-        foreach ($absensis as $absensi) {
-            if ($absensi->time_end < date("h:i")) {
-                $absen = Absensi::where('tgl_absen', '<', date("Y-m-d"));
-                $absen->update([
-                    'keterangan' => 'tutup',
-                ]);
-                $absen = Absensi::where('time_end', '<', date("H:i"));
-                $absen->update([
-                    'keterangan' => 'tutup',
-                ]);
-            }
-        }
+        $absen = Absensi::where('tgl_absen', '<', date("Y-m-d"));
+        $absen->update([
+            'keterangan' => 'tutup',
+        ]);
+        $absen = Absensi::where('time_end', '<', date("H:i"));
+        $absen->update([
+            'keterangan' => 'tutup',
+        ]);
     }
     /**
      * Display a listing of the resource.

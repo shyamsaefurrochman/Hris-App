@@ -179,7 +179,7 @@
                                                             onclick="handleDeleteAbsensi('{{ $absensi->id_absensi }}')"
                                                             title="Delete Absensi" data-bs-toggle="tooltip"
                                                             data-bs-placement="bottom">
-                                                            <span class="text-danger me-2">
+                                                            <span class="text-danger">
                                                                 <i data-feather="trash" class="fea icon-sm"> </i>
                                                             </span>
                                                         </button>

@@ -8,9 +8,10 @@
 
         <ul class="sidebar-menu">
             <li><a href="{{ route('dashboard.index') }}"><i class="ti ti-dashboard me-2"></i>Dashboard</a></li>
+            @if ( Auth::user()->role == 'admin' )
             <li><a href="{{ route('pegawai.index') }}"><i class="ti ti-user me-2"></i>Pegawai</a></li>
             <li><a href="{{ route('absensi.index') }}"><i class="ti ti-list me-2"></i>List Absensi</a></li>
-            <li><a href="#"><i class="ti ti-receipt me-2"></i>Perizinan Cuti</a></li>
+            @endif
             <!-- sidebar-menu  -->
     </div>
     <!-- Sidebar Footer -->

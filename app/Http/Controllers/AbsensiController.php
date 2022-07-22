@@ -15,18 +15,14 @@ class AbsensiController extends Controller
     function __construct()
     {
         $absensis = Absensi::get();
-        foreach ($absensis as $absensi) {
-            if ($absensi->time_end < date("h:i")) {
-                $absen = Absensi::where('tgl_absen', '<', date("Y-m-d"));
-                $absen->update([
-                    'keterangan' => 'tutup',
-                ]);
-                $absen = Absensi::where('time_end', '<', date("H:i"));
-                $absen->update([
-                    'keterangan' => 'tutup',
-                ]);
-            }
-        }
+        $absen = Absensi::where('tgl_absen', '<', date("Y-m-d"));
+        $absen->update([
+            'keterangan' => 'tutup',
+        ]);
+        $absen = Absensi::where('time_end', '<', date("H:i"));
+        $absen->update([
+            'keterangan' => 'tutup',
+        ]);
     }
     /**
      * Display a listing of the resource.
@@ -61,50 +57,60 @@ class AbsensiController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'tgl_absen' => 'required',
-            'time_start' => 'required',
-            'time_end' => 'required',
-            'keterangan' => 'required',
-        ]);
+        $tgl_absen = Absensi::where('tgl_absen', $request->tgl_absen)->first();
 
-        $absen = Absensi::create([
-            'id_user' => Auth::user()->id_user,
-            'tgl_absen' => $request->tgl_absen,
-            'time_start' => $request->time_start,
-            'time_end' => $request->time_end,
-            'keterangan' => $request->keterangan,
-        ]);
-
-        $id_absensi = DB::table('tb_absensi')->max('id_absensi');
-        $max = $id_absensi + 1;
-        DB::update("ALTER TABLE tb_absensi AUTO_INCREMENT = $max;");
-
-        $pegawais = User::get();
-
-        foreach ($pegawais as $pegawai) {
-            $UserAbsens[] = UserAbsen::create(
-                $Absens = [
-                    'id_absensi' => $max,
-                    'id_user' => $pegawai->id_user,
-                    'keterangan' => "tidak hadir",
-                ]
-            );
-        };
-
-        if ($absen && $UserAbsens) {
+        if ($tgl_absen == true) {
             return redirect()
                 ->route('absensi.index')
                 ->with([
-                    Alert::success('Berhasil', 'Absensi Berhasil Ditambahkan')
+                    Alert::error('Gagal', 'Tanggal Absensi Sudah Ada')
                 ]);
         } else {
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with([
-                    Alert::error('Gagal', 'Absensi Gagal Ditambahkan')
-                ]);
+            $this->validate($request, [
+                'tgl_absen' => 'required',
+                'time_start' => 'required',
+                'time_end' => 'required',
+                'keterangan' => 'required',
+            ]);
+
+            $absen = Absensi::create([
+                'id_user' => Auth::user()->id_user,
+                'tgl_absen' => $request->tgl_absen,
+                'time_start' => $request->time_start,
+                'time_end' => $request->time_end,
+                'keterangan' => $request->keterangan,
+            ]);
+
+            $id_absensi = DB::table('tb_absensi')->max('id_absensi');
+            $max = $id_absensi;
+            DB::update("ALTER TABLE tb_absensi AUTO_INCREMENT = $max;");
+
+            $pegawais = User::get();
+
+            foreach ($pegawais as $pegawai) {
+                $UserAbsens[] = UserAbsen::create(
+                    $Absens = [
+                        'id_absensi' => $max,
+                        'id_user' => $pegawai->id_user,
+                        'keterangan' => "tidak hadir",
+                    ]
+                );
+            };
+
+            if ($absen && $UserAbsens) {
+                return redirect()
+                    ->route('absensi.index')
+                    ->with([
+                        Alert::success('Berhasil', 'Absensi Berhasil Ditambahkan')
+                    ]);
+            } else {
+                return redirect()
+                    ->back()
+                    ->withInput()
+                    ->with([
+                        Alert::error('Gagal', 'Absensi Gagal Ditambahkan')
+                    ]);
+            }
         }
     }
 
